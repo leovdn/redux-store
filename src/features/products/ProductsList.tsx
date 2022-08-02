@@ -16,6 +16,10 @@ const ProductsList = () => {
     await api.get("/api/products").then((res) => setProducts(res.data.products))
   }
 
+  function deleteProduct(id: string) {
+    api.delete(`api/products/${id}`)
+  }
+
   useEffect(() => {
     getProducts()
   }, [])
@@ -36,7 +40,7 @@ const ProductsList = () => {
 
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <button>Add</button>
-              <button>Remove</button>
+              <button onClick={() => deleteProduct(product.id)}>Remove</button>
             </div>
           </div>
         ))}

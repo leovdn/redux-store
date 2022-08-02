@@ -1,8 +1,11 @@
-import { createServer, Factory, Model } from "miragejs"
+import { ActiveModelSerializer, createServer, Factory, Model } from "miragejs"
 import { faker } from "@faker-js/faker"
 
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      application: ActiveModelSerializer,
+    },
     models: {
       product: Model,
     },
@@ -32,7 +35,15 @@ export function makeServer() {
 
       this.get("/products")
       this.get("/products/:id")
-      this.post("/products")
+
+      this.post("/products", (schema, request) => {
+        let attrs = JSON.parse(request.requestBody)
+        return schema.create("product", attrs)
+      })
+
+      this.patch("/products/:id")
+
+      this.delete("/products/:id")
     },
 
     seeds(server) {

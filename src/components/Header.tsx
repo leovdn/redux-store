@@ -19,7 +19,13 @@ const Header = () => {
       </h3>
 
       <nav>
-        <ul>
+        <ul style={{ display: "flex", gap: 24, listStyle: "none" }}>
+          <li>
+            <Link to="/product" style={{ color: "#ddd" }}>
+              Add Product
+            </Link>
+          </li>
+
           <li>
             <Link to="/cart" style={{ color: "#ddd" }}>
               Carrinho
