@@ -4,6 +4,9 @@ import Layout from "./components/Layout"
 import ProductsList from "./features/products/ProductsList"
 import ProductItem from "./features/products/ProductItem"
 import Cart from "./features/cart/Cart"
+import { makeServer } from "./services/mirage"
+
+makeServer()
 
 function App() {
   return (
