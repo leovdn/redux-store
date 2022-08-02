@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { api } from "../../services/api"
 
 export type Product = {
-  id: number
+  id: string
   title: string
   price: number
-  imgUrl: string
+  img?: string
 }
 
 const ProductsList = () => {
   const [products, setProducts] = useState<Product[]>([])
 
   async function getProducts() {
-    await api.get("/api/products").then((res) => setProducts(res.data))
+    await api.get("/api/products").then((res) => setProducts(res.data.products))
   }
 
   useEffect(() => {
@@ -24,15 +25,18 @@ const ProductsList = () => {
       <h3>Lista de Produtos</h3>
 
       <div className="products-container">
-        {products.map((product) => (
+        {products?.map((product) => (
           <div key={product.id} className="product-item">
-            <div className="bg-img"></div>
+            {/* <div className="bg-img"></div> */}
+            <Link to={`/product/${product.id}`}>
+              <img src={product.img} alt="" className="bg-img" />
+            </Link>
             <h4>{product.title}</h4>
             <p>{product.price}</p>
 
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <button>add</button>
-              <button>remove</button>
+              <button>Add</button>
+              <button>Remove</button>
             </div>
           </div>
         ))}
