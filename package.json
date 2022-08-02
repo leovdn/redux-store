@@ -45,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.3.0",
     "miragejs": "^0.1.45"
   }
 }
