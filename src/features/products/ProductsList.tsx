@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useAppSelector } from "../../app/hooks"
 import { api } from "../../services/api"

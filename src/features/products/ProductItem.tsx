@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { useAppSelector } from "../../app/hooks"
 import { api } from "../../services/api"
+import { selectProductById } from "./productsSlice"
 
 interface ProductItemProps {
   id: string
@@ -11,26 +13,22 @@ interface ProductItemProps {
 
 const ProductItem = () => {
   const { productId } = useParams()
-  const [product, setProduct] = useState<ProductItemProps>(
-    {} as ProductItemProps
-  )
-
   const navigation = useNavigate()
 
-  async function getProducts() {
-    await api
-      .get(`/api/products/${productId}`)
-      .then((res) => setProduct(res.data.product))
-  }
+  const product = useAppSelector((state) => selectProductById(state, productId))
 
   function deleteProduct(id: string) {
     api.delete(`api/products/${id}`)
     navigation("/")
   }
 
-  useEffect(() => {
-    getProducts()
-  }, [])
+  if (!product) {
+    return (
+      <section>
+        <h2>No Product found!</h2>
+      </section>
+    )
+  }
 
   return (
     <section>
