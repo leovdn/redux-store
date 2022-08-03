@@ -1,3 +1,21 @@
+:root {
+  --clr-primary: #645cff;
+  --clr-primary-dark: #282566;
+  --clr-primary-light: #a29dff;
+  --clr-grey-1: #102a42;
+  --clr-grey-5: #617d98;
+  --clr-grey-10: #f1f5f8;
+  --clr-white: #fff;
+  --clr-red-dark: hsl(360, 67%, 44%);
+  --clr-red-light: hsl(360, 71%, 66%);
+  --transition: all 0.3s linear;
+  --spacing: 0.25rem;
+  --radius: 0.25rem;
+  --large-screen-width: 1170px;
+  --small-screen-width: 90vw;
+  --fixed-width: 50rem;
+}
+
 * {
   margin: 0;
   padding: 0;

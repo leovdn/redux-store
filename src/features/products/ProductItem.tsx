@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { api } from "../../services/api"
 
 interface ProductItemProps {
@@ -15,10 +15,17 @@ const ProductItem = () => {
     {} as ProductItemProps
   )
 
+  const navigation = useNavigate()
+
   async function getProducts() {
     await api
       .get(`/api/products/${productId}`)
       .then((res) => setProduct(res.data.product))
+  }
+
+  function deleteProduct(id: string) {
+    api.delete(`api/products/${id}`)
+    navigation("/")
   }
 
   useEffect(() => {
@@ -37,7 +44,7 @@ const ProductItem = () => {
 
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <button>Add</button>
-            <button>Remove</button>
+            <button onClick={() => deleteProduct(product.id)}>Remove</button>
           </div>
         </div>
       </div>

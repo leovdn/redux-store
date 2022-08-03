@@ -6,9 +6,12 @@ import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import "./index.css"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { fetchProducts } from "./features/products/productsSlice"
 
 const container = document.getElementById("root")!
 const root = createRoot(container)
+
+store.dispatch(fetchProducts())
 
 root.render(
   // <React.StrictMode>

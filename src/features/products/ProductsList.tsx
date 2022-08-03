@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { useAppSelector } from "../../app/hooks"
 import { api } from "../../services/api"
+import { selectAllProducts } from "./productsSlice"
 
 export type Product = {
   id: string
@@ -10,28 +12,19 @@ export type Product = {
 }
 
 const ProductsList = () => {
-  const [products, setProducts] = useState<Product[]>([])
-
-  async function getProducts() {
-    await api.get("/api/products").then((res) => setProducts(res.data.products))
-  }
+  const products = useAppSelector(selectAllProducts)
 
   function deleteProduct(id: string) {
     api.delete(`api/products/${id}`)
   }
-
-  useEffect(() => {
-    getProducts()
-  }, [])
 
   return (
     <section>
       <h3>Lista de Produtos</h3>
 
       <div className="products-container">
-        {products?.map((product) => (
+        {products?.map((product: Product) => (
           <div key={product.id} className="product-item">
-            {/* <div className="bg-img"></div> */}
             <Link to={`/product/${product.id}`}>
               <img src={product.img} alt="" className="bg-img" />
             </Link>

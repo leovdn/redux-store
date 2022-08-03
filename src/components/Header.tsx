@@ -1,39 +1,23 @@
 import { Link } from "react-router-dom"
+import { CartIcon } from "../icons"
 
 const Header = () => {
   return (
-    <header
-      style={{
-        padding: "16px 8px",
-        backgroundColor: "#764abc",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: "2rem",
-      }}
-    >
-      <h3>
-        <Link to="/" style={{ color: "#ddd" }}>
-          Redux Store
+    <nav>
+      <div className="nav-center">
+        <Link to="/">
+          <h3>Redux Store</h3>
         </Link>
-      </h3>
-
-      <nav>
-        <ul style={{ display: "flex", gap: 24, listStyle: "none" }}>
-          <li>
-            <Link to="/product" style={{ color: "#ddd" }}>
-              Add Product
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/cart" style={{ color: "#ddd" }}>
-              Carrinho
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
+        <div className="nav-container">
+          <Link to="/cart">
+            <CartIcon />
+          </Link>
+          <div className="amount-container">
+            <p className="total-amount">{0}</p>
+          </div>
+        </div>
+      </div>
+    </nav>
   )
 }
 
