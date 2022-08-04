@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { api } from "../../services/api"
+import { useAppDispatch } from "../../app/hooks"
+import { addNewProduct } from "./productsSlice"
 
 const AddNewProduct = () => {
   const [title, setTitle] = useState("")
@@ -9,6 +10,7 @@ const AddNewProduct = () => {
     "https://loremflickr.com/cache/resized/65535_52145066049_c3b9c3d601_c_640_480_nofilter.jpg"
   )
 
+  const dispatch = useAppDispatch()
   const navigation = useNavigate()
 
   const onTitleChanged = (e) => setTitle(e.target.value)
@@ -19,11 +21,7 @@ const AddNewProduct = () => {
   const handleAddNewProduct = () => {
     if (canSave) {
       try {
-        api.post("api/products", {
-          price: Number(price),
-          title: title,
-          img: img,
-        })
+        dispatch(addNewProduct({ title, price, img })).unwrap()
 
         navigation("/")
       } catch (error) {

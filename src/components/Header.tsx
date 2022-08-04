@@ -6,7 +6,10 @@ const Header = () => {
     <nav>
       <div className="nav-center">
         <Link to="/">
-          <h3>Redux Store</h3>
+          <h2>Redux Store</h2>
+        </Link>
+        <Link to="/product">
+          <h4>Add New Product</h4>
         </Link>
         <div className="nav-container">
           <Link to="/cart">

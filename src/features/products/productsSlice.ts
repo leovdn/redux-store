@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { AppDispatch, RootState } from "../../app/store"
 import { api } from "../../services/api"
 import { Product } from "./ProductsList"
 
@@ -31,7 +32,26 @@ export const addNewProduct = createAsyncThunk(
   async (initialProduct) => {
     try {
       const res = await api.post("/api/products", initialProduct)
-      return res.data
+      return res.data.product
+    } catch (error: any) {
+      return error.message
+    }
+  }
+)
+
+export const deleteProduct = createAsyncThunk<Product, any>(
+  "products/deleteProduct",
+  async (initialProduct: { id: string }) => {
+    const { id } = initialProduct
+
+    try {
+      console.log({ initialProduct })
+      const res = await api.delete(`api/products/${id}`)
+
+      return initialProduct
+      // if (res?.status === 200) return initialProduct
+
+      // return `${res?.status}: ${res?.statusText}`
     } catch (error: any) {
       return error.message
     }
@@ -43,7 +63,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     productsAdded: {
-      reducer(state, action: PayloadAction<Product, string>) {
+      reducer(state, action: PayloadAction<Product>) {
         state.products.push(action.payload)
       },
       prepare({ title, price }: Product): any {
@@ -73,6 +93,19 @@ const productsSlice = createSlice({
 
       .addCase(addNewProduct.fulfilled, (state, action) => {
         state.products.push(action.payload)
+      })
+
+      .addCase(deleteProduct.fulfilled, (state, action: any) => {
+        console.log({ action, state })
+        if (!action.payload) {
+          console.log("Delete not completed")
+          console.log(action.payload)
+          return
+        }
+
+        const { id } = action.payload
+        const products = state.products.filter((product) => product.id != id)
+        state.products = products
       })
   },
 })
