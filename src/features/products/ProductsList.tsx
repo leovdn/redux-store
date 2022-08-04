@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { addToCart } from "../cart/cartSlice"
 import { deleteProduct, selectAllProducts } from "./productsSlice"
 
 export type Product = {
@@ -13,6 +14,14 @@ export type Product = {
 const ProductsList = () => {
   const dispatch = useAppDispatch()
   const products: Product[] = useAppSelector(selectAllProducts)
+
+  const onAddToCart = (item: Product) => {
+    try {
+      dispatch(addToCart(item))
+    } catch (err) {
+      console.error("Failed to delete the post", err)
+    }
+  }
 
   const onDeleteProductClicked = (id: string) => {
     try {
@@ -36,7 +45,7 @@ const ProductsList = () => {
             <p>{product.price}</p>
 
             <div style={{ display: "flex", justifyContent: "space-around" }}>
-              <button>Add</button>
+              <button onClick={() => onAddToCart(product)}>Add</button>
               <button onClick={() => onDeleteProductClicked(product.id)}>
                 Remove
               </button>

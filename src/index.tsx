@@ -7,11 +7,13 @@ import reportWebVitals from "./reportWebVitals"
 import "./index.css"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { fetchProducts } from "./features/products/productsSlice"
+import { getCart } from "./features/cart/cartSlice"
 
 const container = document.getElementById("root")!
 const root = createRoot(container)
 
 store.dispatch(fetchProducts())
+store.dispatch(getCart())
 
 root.render(
   // <React.StrictMode>
