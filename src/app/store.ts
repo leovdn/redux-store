@@ -6,6 +6,7 @@ export const store = configureStore({
     // counter: counterReducer,
     products: productsReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 })
 
 export type AppDispatch = typeof store.dispatch
