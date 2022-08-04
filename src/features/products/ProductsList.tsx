@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { api } from "../../services/api"
 import { deleteProduct, selectAllProducts } from "./productsSlice"
 
 export type Product = {
@@ -14,10 +13,6 @@ export type Product = {
 const ProductsList = () => {
   const dispatch = useAppDispatch()
   const products: Product[] = useAppSelector(selectAllProducts)
-
-  // function deleteProduct(id: string) {
-  //   api.delete(`api/products/${id}`)
-  // }
 
   const onDeleteProductClicked = (id: string) => {
     try {

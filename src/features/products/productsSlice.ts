@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AppDispatch, RootState } from "../../app/store"
 import { api } from "../../services/api"
 import { Product } from "./ProductsList"
 
@@ -48,10 +47,9 @@ export const deleteProduct = createAsyncThunk<Product, any>(
       console.log({ initialProduct })
       const res = await api.delete(`api/products/${id}`)
 
-      return initialProduct
-      // if (res?.status === 200) return initialProduct
+      if (res?.status === 204) return initialProduct
 
-      // return `${res?.status}: ${res?.statusText}`
+      return `${res?.status}: ${res?.statusText}`
     } catch (error: any) {
       return error.message
     }
@@ -96,7 +94,7 @@ const productsSlice = createSlice({
       })
 
       .addCase(deleteProduct.fulfilled, (state, action: any) => {
-        console.log({ action, state })
+        // console.log({ action, state })
         if (!action.payload) {
           console.log("Delete not completed")
           console.log(action.payload)
@@ -104,7 +102,7 @@ const productsSlice = createSlice({
         }
 
         const { id } = action.payload
-        const products = state.products.filter((product) => product.id != id)
+        const products = state.products.filter((product) => product.id !== id)
         state.products = products
       })
   },

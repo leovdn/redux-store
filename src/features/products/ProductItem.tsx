@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { api } from "../../services/api"
 import { deleteProduct, selectProductById } from "./productsSlice"
 
 interface ProductItemProps {
@@ -20,11 +17,6 @@ const ProductItem = () => {
   const product: ProductItemProps = useAppSelector((state) =>
     selectProductById(state, productId)
   )
-
-  // function deleteProduct(id: string) {
-  //   api.delete(`api/products/${id}`)
-  //   navigation("/")
-  // }
 
   const onDeleteProductClicked = () => {
     try {
