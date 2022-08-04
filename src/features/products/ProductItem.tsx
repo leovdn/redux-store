@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
-import { useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { api } from "../../services/api"
-import { selectProductById } from "./productsSlice"
+import { deleteProduct, selectProductById } from "./productsSlice"
 
 interface ProductItemProps {
   id: string
@@ -14,12 +15,24 @@ interface ProductItemProps {
 const ProductItem = () => {
   const { productId } = useParams()
   const navigation = useNavigate()
+  const dispatch = useAppDispatch()
 
-  const product = useAppSelector((state) => selectProductById(state, productId))
+  const product: ProductItemProps = useAppSelector((state) =>
+    selectProductById(state, productId)
+  )
 
-  function deleteProduct(id: string) {
-    api.delete(`api/products/${id}`)
-    navigation("/")
+  // function deleteProduct(id: string) {
+  //   api.delete(`api/products/${id}`)
+  //   navigation("/")
+  // }
+
+  const onDeleteProductClicked = () => {
+    try {
+      dispatch(deleteProduct({ id: product.id })).unwrap()
+      navigation("/")
+    } catch (err) {
+      console.error("Failed to delete the post", err)
+    }
   }
 
   if (!product) {
@@ -42,7 +55,7 @@ const ProductItem = () => {
 
           <div style={{ display: "flex", justifyContent: "space-around" }}>
             <button>Add</button>
-            <button onClick={() => deleteProduct(product.id)}>Remove</button>
+            <button onClick={onDeleteProductClicked}>Remove</button>
           </div>
         </div>
       </div>

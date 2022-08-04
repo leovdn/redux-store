@@ -1,7 +1,8 @@
+import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
-import { useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { api } from "../../services/api"
-import { selectAllProducts } from "./productsSlice"
+import { deleteProduct, selectAllProducts } from "./productsSlice"
 
 export type Product = {
   id: string
@@ -11,10 +12,19 @@ export type Product = {
 }
 
 const ProductsList = () => {
-  const products = useAppSelector(selectAllProducts)
+  const dispatch = useAppDispatch()
+  const products: Product[] = useAppSelector(selectAllProducts)
 
-  function deleteProduct(id: string) {
-    api.delete(`api/products/${id}`)
+  // function deleteProduct(id: string) {
+  //   api.delete(`api/products/${id}`)
+  // }
+
+  const onDeleteProductClicked = (id: string) => {
+    try {
+      dispatch(deleteProduct({ id: id })).unwrap()
+    } catch (err) {
+      console.error("Failed to delete the post", err)
+    }
   }
 
   return (
@@ -32,7 +42,9 @@ const ProductsList = () => {
 
             <div style={{ display: "flex", justifyContent: "space-around" }}>
               <button>Add</button>
-              <button onClick={() => deleteProduct(product.id)}>Remove</button>
+              <button onClick={() => onDeleteProductClicked(product.id)}>
+                Remove
+              </button>
             </div>
           </div>
         ))}
