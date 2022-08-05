@@ -7,21 +7,9 @@ import { api } from "../../services/api"
 import { apiSlice } from "../api/apiSlice"
 import { Product } from "./ProductsList"
 
-interface ProductsState {
-  products: Product[]
-  status: "idle" | "pending" | "loading" | "succeeded" | "failed"
-  error: null | string | undefined
-}
-
 interface Products {
   products: Product[]
 }
-
-// const initialState: ProductsState = {
-//   products: [],
-//   status: "idle",
-//   error: null,
-// }
 
 const postsAdapter = createEntityAdapter<Product>({
   selectId: (product) => product.id,
@@ -80,10 +68,32 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: (result, error, data) => [{ type: "Product" }],
     }),
+    addNewProduct: builder.mutation({
+      query: (initialPost) => ({
+        url: "/products",
+        method: "POST",
+        body: initialPost,
+      }),
+      invalidatesTags: [{ type: "Product" }],
+    }),
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/products/${id}`,
+        method: "DELETE",
+        body: { id },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Product", id: arg.id },
+      ],
+    }),
   }),
 })
 
-export const { useGetProductsQuery } = extendedApiSlice
+export const {
+  useGetProductsQuery,
+  useAddNewProductMutation,
+  useDeleteProductMutation,
+} = extendedApiSlice
 
 export const selectProductsResult =
   extendedApiSlice.endpoints.getProducts.select()
@@ -92,6 +102,8 @@ const selectProductsData = createSelector(
   selectProductsResult,
   (postsResult) => postsResult.data
 )
+
+// export const {} = postsAdapter.getSelectors((state) => selectProductsData)
 
 // const productsSlice = createSlice({
 //   name: "products",

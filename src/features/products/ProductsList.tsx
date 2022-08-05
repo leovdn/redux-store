@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { addToCart } from "../cart/cartSlice"
-import { deleteProduct, selectProductsResult } from "./productsSlice"
+import {
+  deleteProduct,
+  selectProductsResult,
+  useDeleteProductMutation,
+} from "./productsSlice"
 
 export type Product = {
   id: string
@@ -11,7 +15,7 @@ export type Product = {
 }
 
 const ProductsList = () => {
-  const dispatch = useAppDispatch()
+  const [deleteProduct] = useDeleteProductMutation()
 
   const { isLoading, isSuccess, isError, data, error } =
     useAppSelector(selectProductsResult)
@@ -26,13 +30,14 @@ const ProductsList = () => {
   //   }
   // }
 
-  // const onDeleteProductClicked = (id: string) => {
-  //   try {
-  //     dispatch(deleteProduct({ id: id })).unwrap()
-  //   } catch (err) {
-  //     console.error("Failed to delete the post", err)
-  //   }
-  // }
+  const onDeleteProductClicked = async (id: any) => {
+    try {
+      deleteProduct(id)
+      console.log(typeof id)
+    } catch (err) {
+      console.error("Failed to delete the post", err)
+    }
+  }
 
   if (isLoading) {
     return <p>...Loading</p>
@@ -57,10 +62,10 @@ const ProductsList = () => {
               <p>{product.price}</p>
 
               <div style={{ display: "flex", justifyContent: "space-around" }}>
-                {/* <button onClick={() => onAddToCart(product)}>Add</button>
-              <button onClick={() => onDeleteProductClicked(product.id)}>
-                Remove
-              </button> */}
+                {/* <button onClick={() => onAddToCart(product)}>Add</button> */}
+                <button onClick={() => onDeleteProductClicked(product.id)}>
+                  Remove
+                </button>
               </div>
             </div>
           ))}
