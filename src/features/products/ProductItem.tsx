@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { deleteProduct, selectProductById } from "./productsSlice"
+import { deleteProduct } from "./productsSlice"
 
 interface ProductItemProps {
   id: string
@@ -14,32 +14,32 @@ const ProductItem = () => {
   const navigation = useNavigate()
   const dispatch = useAppDispatch()
 
-  const product: ProductItemProps = useAppSelector((state) =>
-    selectProductById(state, productId)
-  )
+  // const product: ProductItemProps = useAppSelector((state) =>
+  //   // selectProductById(state, productId)
+  // )
 
   const onDeleteProductClicked = () => {
     try {
-      dispatch(deleteProduct({ id: product.id })).unwrap()
+      // dispatch(deleteProduct({ id: product.id })).unwrap()
       navigation("/")
     } catch (err) {
       console.error("Failed to delete the post", err)
     }
   }
 
-  if (!product) {
-    return (
-      <section>
-        <h2>No Product found!</h2>
-      </section>
-    )
-  }
+  // if (!product) {
+  //   return (
+  //     <section>
+  //       <h2>No Product found!</h2>
+  //     </section>
+  //   )
+  // }
 
   return (
     <section>
       <h3>Lista de Produtos</h3>
 
-      <div className="products-container">
+      {/* <div className="products-container">
         <div key={product.id} className="product-item">
           <img src={product.img} alt="" className="bg-img" />
           <h4>{product.title}</h4>
@@ -50,7 +50,7 @@ const ProductItem = () => {
             <button onClick={onDeleteProductClicked}>Remove</button>
           </div>
         </div>
-      </div>
+      </div> */}
     </section>
   )
 }
