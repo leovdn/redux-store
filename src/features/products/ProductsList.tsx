@@ -1,13 +1,8 @@
 import { Link } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch } from "../../app/hooks"
 import { addToCart } from "../cart/cartSlice"
 
-import {
-  selectProductsResult,
-  useAddNewProductMutation,
-  useDeleteProductMutation,
-  useGetProductsQuery,
-} from "./productsSlice"
+import { useDeleteProductMutation, useGetProductsQuery } from "./productsSlice"
 
 export type Product = {
   id: string

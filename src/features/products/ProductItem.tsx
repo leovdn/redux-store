@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { useAppDispatch } from "../../app/hooks"
 import { addToCart } from "../cart/cartSlice"
 import { Product } from "./ProductsList"
 import {
@@ -7,22 +7,11 @@ import {
   useGetProductByIdQuery,
 } from "./productsSlice"
 
-interface ProductItemProps {
-  id: string
-  title: string
-  price: number
-  img?: string
-}
-
 const ProductItem = () => {
   const { productId } = useParams()
   const navigation = useNavigate()
   const [deleteProduct] = useDeleteProductMutation()
   const dispatch = useAppDispatch()
-
-  // const product: ProductItemProps = useAppSelector((state) =>
-  //   // selectProductById(state, productId)
-  // )
 
   const { isError, error, data, isLoading, isSuccess } =
     useGetProductByIdQuery(productId)
@@ -55,8 +44,6 @@ const ProductItem = () => {
   if (isLoading) {
     return <p>Loading...</p>
   }
-
-  console.log(data)
 
   return (
     <section>
