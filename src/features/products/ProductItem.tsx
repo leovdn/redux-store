@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { deleteProduct } from "./productsSlice"
 
 interface ProductItemProps {
   id: string

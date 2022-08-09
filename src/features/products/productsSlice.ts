@@ -17,80 +17,40 @@ const postsAdapter = createEntityAdapter<Product>({
 
 const initialState = postsAdapter.getInitialState()
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
-  async () => {
-    try {
-      const res = await api.get("/api/products")
-      return res.data
-    } catch (error: any) {
-      return error.message
-    }
-  }
-)
-
-export const addNewProduct = createAsyncThunk(
-  "products/addNewProduct",
-  async (initialProduct) => {
-    try {
-      const res = await api.post("/api/products", initialProduct)
-      return res.data.product
-    } catch (error: any) {
-      return error.message
-    }
-  }
-)
-
-export const deleteProduct = createAsyncThunk<Product, any>(
-  "products/deleteProduct",
-  async (initialProduct: { id: string }) => {
-    const { id } = initialProduct
-
-    try {
-      console.log({ initialProduct })
-      const res = await api.delete(`api/products/${id}`)
-
-      if (res?.status === 204) return initialProduct
-
-      return `${res?.status}: ${res?.statusText}`
-    } catch (error: any) {
-      return error.message
-    }
-  }
-)
-
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<Products, void>({
       query: () => "/products",
-      transformResponse: (response: { products: Product[] }) => {
-        return response
-      },
-      providesTags: (result, error, data) => [{ type: "Product" }],
+      providesTags: (result, error, data) => ["Product"],
     }),
+
+    getProductById: builder.query<Product, void>({
+      query: (id) => `/products/${id}`,
+      providesTags: (result, error, data) => ["Product"],
+    }),
+
     addNewProduct: builder.mutation({
       query: (initialPost) => ({
         url: "/products",
         method: "POST",
         body: initialPost,
       }),
-      invalidatesTags: [{ type: "Product" }],
+      invalidatesTags: ["Product"],
     }),
-    deleteProduct: builder.mutation({
+
+    deleteProduct: builder.mutation<void, string>({
       query: (id) => ({
         url: `/products/${id}`,
         method: "DELETE",
-        body: { id },
       }),
-      invalidatesTags: (result, error, arg) => [
-        { type: "Product", id: arg.id },
-      ],
+      invalidatesTags: (result, error, arg) => ["Product"],
     }),
   }),
 })
 
 export const {
   useGetProductsQuery,
+  useGetProductByIdQuery,
   useAddNewProductMutation,
   useDeleteProductMutation,
 } = extendedApiSlice

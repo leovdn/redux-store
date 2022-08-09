@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { addToCart } from "../cart/cartSlice"
+import { useAppSelector } from "../../app/hooks"
+
 import {
-  deleteProduct,
   selectProductsResult,
   useDeleteProductMutation,
+  useGetProductsQuery,
 } from "./productsSlice"
 
 export type Product = {
@@ -17,10 +17,7 @@ export type Product = {
 const ProductsList = () => {
   const [deleteProduct] = useDeleteProductMutation()
 
-  const { isLoading, isSuccess, isError, data, error } =
-    useAppSelector(selectProductsResult)
-
-  console.log(data)
+  const { isError, isLoading, error, data, isSuccess } = useGetProductsQuery()
 
   // const onAddToCart = (item: Product) => {
   //   try {
@@ -33,7 +30,6 @@ const ProductsList = () => {
   const onDeleteProductClicked = async (id: any) => {
     try {
       deleteProduct(id)
-      console.log(typeof id)
     } catch (err) {
       console.error("Failed to delete the post", err)
     }
@@ -51,9 +47,9 @@ const ProductsList = () => {
     <section>
       <h3>Lista de Produtos</h3>
 
-      {isSuccess && (
-        <div className="products-container">
-          {data?.products.map((product) => (
+      <div className="products-container">
+        {isSuccess &&
+          data?.products.map((product) => (
             <div key={product.id} className="product-item">
               <Link to={`/product/${product.id}`}>
                 <img src={product.img} alt="" className="bg-img" />
@@ -69,8 +65,7 @@ const ProductsList = () => {
               </div>
             </div>
           ))}
-        </div>
-      )}
+      </div>
     </section>
   )
 }
