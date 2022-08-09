@@ -27,11 +27,15 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<Product>) => {
-      let compare = state.cartItems.filter(
-        (item) => item.id !== action.payload.id
+      const updatedCart = state.cartItems
+
+      const productExists = updatedCart.find(
+        (product) => product.id == action.payload.id
       )
 
-      if (compare) {
+      if (productExists) {
+        console.log("Ja existe")
+      } else {
         state.cartItems.push(action.payload)
       }
     },
