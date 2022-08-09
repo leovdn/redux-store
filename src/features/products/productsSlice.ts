@@ -11,6 +11,10 @@ interface Products {
   products: Product[]
 }
 
+interface ProductResponse {
+  product: Product
+}
+
 const postsAdapter = createEntityAdapter<Product>({
   selectId: (product) => product.id,
 })
@@ -24,10 +28,12 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, data) => ["Product"],
     }),
 
-    getProductById: builder.query<Product, void>({
-      query: (id) => `/products/${id}`,
-      providesTags: (result, error, data) => ["Product"],
-    }),
+    getProductById: builder.query<ProductResponse, string | number | undefined>(
+      {
+        query: (id: string) => `/products/${id}`,
+        providesTags: (result, error, data) => ["Product"],
+      }
+    ),
 
     addNewProduct: builder.mutation({
       query: (initialPost) => ({
@@ -38,7 +44,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
 
-    deleteProduct: builder.mutation<void, string>({
+    deleteProduct: builder.mutation<void, string | number | undefined>({
       query: (id) => ({
         url: `/products/${id}`,
         method: "DELETE",

@@ -1,5 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { addToCart } from "../cart/cartSlice"
+import { Product } from "./ProductsList"
+import {
+  useDeleteProductMutation,
+  useGetProductByIdQuery,
+} from "./productsSlice"
 
 interface ProductItemProps {
   id: string
@@ -11,45 +17,65 @@ interface ProductItemProps {
 const ProductItem = () => {
   const { productId } = useParams()
   const navigation = useNavigate()
+  const [deleteProduct] = useDeleteProductMutation()
   const dispatch = useAppDispatch()
 
   // const product: ProductItemProps = useAppSelector((state) =>
   //   // selectProductById(state, productId)
   // )
 
+  const { isError, error, data, isLoading, isSuccess } =
+    useGetProductByIdQuery(productId)
+
   const onDeleteProductClicked = () => {
     try {
-      // dispatch(deleteProduct({ id: product.id })).unwrap()
+      deleteProduct(productId)
       navigation("/")
     } catch (err) {
       console.error("Failed to delete the post", err)
     }
   }
 
-  // if (!product) {
-  //   return (
-  //     <section>
-  //       <h2>No Product found!</h2>
-  //     </section>
-  //   )
-  // }
+  const onAddToCart = (item: Product) => {
+    try {
+      dispatch(addToCart(item))
+    } catch (err) {
+      console.error("Failed to delete the post", err)
+    }
+  }
+
+  if (isError) {
+    return (
+      <section>
+        <h2>No Product found!</h2>
+      </section>
+    )
+  }
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
+
+  console.log(data)
 
   return (
     <section>
       <h3>Lista de Produtos</h3>
 
-      {/* <div className="products-container">
-        <div key={product.id} className="product-item">
-          <img src={product.img} alt="" className="bg-img" />
-          <h4>{product.title}</h4>
-          <p>{product.price}</p>
+      {isSuccess && (
+        <div className="products-container">
+          <div key={data.product.id} className="product-item">
+            <img src={data.product.img} alt="" className="bg-img" />
+            <h4>{data.product.title}</h4>
+            <p>{data.product.price}</p>
 
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <button>Add</button>
-            <button onClick={onDeleteProductClicked}>Remove</button>
+            <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <button onClick={() => onAddToCart(data.product)}>Add</button>
+              <button onClick={onDeleteProductClicked}>Remove</button>
+            </div>
           </div>
         </div>
-      </div> */}
+      )}
     </section>
   )
 }
