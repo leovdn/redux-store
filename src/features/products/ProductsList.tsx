@@ -9,6 +9,7 @@ export type Product = {
   title: string
   price: number
   img?: string
+  cartQuantity: number
 }
 
 const ProductsList = () => {
