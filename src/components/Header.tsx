@@ -1,7 +1,20 @@
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { getAllCartItems, getTotal } from "../features/cart/cartSlice"
+import { Product } from "../features/products/ProductsList"
 import { CartIcon } from "../icons"
 
 const Header = () => {
+  const cart = useAppSelector<Product[]>(getAllCartItems)
+  const { totalAmount } = useAppSelector((state) => state.cart)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getTotal())
+  }, [cart, dispatch])
+
   return (
     <nav>
       <div className="nav-center">
@@ -16,7 +29,7 @@ const Header = () => {
             <CartIcon />
           </Link>
           <div className="amount-container">
-            <p className="total-amount">{0}</p>
+            <p className="total-amount">{totalAmount}</p>
           </div>
         </div>
       </div>
